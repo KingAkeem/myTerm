@@ -31,7 +31,6 @@ int main() {
 		  	refresh();
 		  	continue; // No need to go through rest of loop
 			break; 
-
 		default:	
 			addch(c);	
 			refresh();
@@ -49,6 +48,9 @@ static void autocomplete() {
   set_menu_sub(m, derwin(stdscr, 0, 0, y, x));
   post_menu(m);
   refresh();
+  unpost_menu(m);
+  free_item(i[0]);
+  free_menu(m);
   move(y, x+1);
 }
 
