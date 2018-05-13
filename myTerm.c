@@ -2,24 +2,24 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
-
+#include <menu.h>
 
 static void finish(int sig);
-static void translate(const char*);
+static void autocomplete();
 
 int main() {
-  (void) initscr();
+  (void) initscr(); // Initalizes variables needed
   (void) cbreak(); // Disables buffering and allows single character capture
   (void) noecho(); // Disables automatic echoing
-  refresh();
+  refresh(); // Clears screen entirely
   keypad(stdscr, TRUE); // Captures special keystrokes
   char buf[500];
   int i = 0;
   for(;;) {
     char c = getch();
     addch(c);
-    if (c == ' ') {
-      translate(buf);
+    if (c == '.') {
+      autocomplete();
       i = 0;
       continue;
     }
@@ -28,12 +28,13 @@ int main() {
   }
   finish(0);
 }
-static void translate(const char* word) {
-  int ret = strcmp(word, "Hello");
-  if (ret) {
-    addstr("Bonjour");
-    refresh();
-  }
+
+static void autocomplete() {
+  ITEM **i = (ITEM **)calloc(2, sizeof(ITEM*));
+  i[0] = new_item("Name", "Desc");
+  MENU *m = new_menu((ITEM**)i);
+  post_menu(m);
+  refresh();
 }
 static void finish(int sig) {
   endwin();
