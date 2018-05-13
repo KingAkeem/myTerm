@@ -21,10 +21,10 @@ For now running myTerm is as simple as running `make` in the base directory. You
 
 
 ### TO-DO
-- [] Fix segmentation fault on Mac OS X.
-- [] Add modules to search directories
-- [] Search user directories for auto-completion of code using user libraries
-- [] Fix Makefile so it'll add the correct library for `curses`
-- [] Add line numbering
-- [] Add syntax highlighting
+- [ ] Fix segmentation fault on Mac OS X.
+- [ ] Add modules to search directories
+- [ ] Search user directories for auto-completion of code using user libraries
+- [ ] Fix Makefile so it'll add the correct library for `curses`
+- [ ] Add line numbering
+- [ ] Add syntax highlighting
 - [x] Add popup menu for auto-completion after (.)
