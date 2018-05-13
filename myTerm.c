@@ -3,6 +3,8 @@
 #include <curses.h>
 #include <stdlib.h>
 
+#define GET_CUR_POS int x, y; getyx(stdscr, y, x)
+
 static void finish(int sig);
 static void autocomplete();
 
@@ -15,37 +17,39 @@ int main() {
 
   char *word = calloc(500, 1);
   int i = 0;
-  char c; 
+  char c;
   for(;;) {
 	// Capturing user input and displaying it
-    char c = getch();
-	refresh();
-    addch(c);
+    c = getch();
+	switch(c) {
 	// If user input a period then we look to autocomplete
-    if (c == '.') {
-	  int x, y;
-  	  getyx(stdscr, y, x);	  
-      autocomplete(x, y);
-	  addch(' ');
-      continue; // No need to go through rest of loop
-    }
+		case '.':
+	  		addch(c);
+		  	refresh();
+		  	autocomplete();
+		  	addch(' ');
+		  	refresh();
+		  	continue; // No need to go through rest of loop
+			break; 
+
+		default:	
+			addch(c);	
+			refresh();
+	}
    word[i] = c;
    i++;
   }
 }
 
-static void autocomplete(const size_t x, const size_t y) {
+static void autocomplete() {
+  GET_CUR_POS; 
   ITEM **i = (ITEM **)calloc(2, sizeof(ITEM*));
   i[0] = new_item("Name", "Desc");
   MENU *m = new_menu((ITEM**)i);
-  WINDOW *men_win = derwin(stdscr, 0, 0, x, y);
-  set_menu_sub(m, men_win);
+  set_menu_sub(m, derwin(stdscr, 0, 0, y, x));
   post_menu(m);
   refresh();
-  free_item(i[0]);
-  free_menu(m); 
-  unpost_menu(m);
-  delwin(men_win);
+  move(y, x+1);
 }
 
 static void finish(int sig) {
