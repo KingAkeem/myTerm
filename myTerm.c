@@ -5,8 +5,10 @@
 
 #define GET_CUR_POS int x, y; getyx(stdscr, y, x)
 #define MAX_WORD_SIZE 500
+
 static void auto_cmpl();
 static void scroll_menu(MENU*, char);
+
 int main() {
   (void) initscr(); // Initalizes variables needed
   (void) cbreak(); // Disables buffering and allows single character capture
@@ -26,7 +28,6 @@ int main() {
 	  		addch(c);
 		  	refresh();
 		  	auto_cmpl();
-		  	addch(' ');
 		  	refresh();
 		  	continue; // No need to go through rest of loop break;
 		default:
