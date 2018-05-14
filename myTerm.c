@@ -8,13 +8,14 @@
 #define GET_CUR_POS int x, y; getyx(stdscr, y, x)
 #define MAX_WORD_SIZE 500
 
-static void auto_cmpl();
-static void scroll_menu(MENU*, char);
+static void auto_complete();
+static int scroll_menu(MENU*, int, int); 
 
 int main(int argc, const char* argv[]) {
 
 	(void) initscr(); // Initalizes variables needed
 	(void) noecho(); // Disables automatic echoing
+	(void) cbreak(); // Allowws single character buffering
 	refresh(); // Clears screen entirely
 	keypad(stdscr, TRUE); // Captures special keystrokes
 
@@ -29,7 +30,7 @@ int main(int argc, const char* argv[]) {
 		case '.':
 			addch(c);
 			refresh();
-			auto_cmpl();
+			auto_complete();
 			refresh();
 			continue; // No need to go through rest of loop break;
 		default:
@@ -44,34 +45,47 @@ int main(int argc, const char* argv[]) {
 	}
 }
 
-static void scroll_menu(MENU *menu, char c) {
-	do {
-		switch (c) {
+static int scroll_menu(MENU *menu, int choice, int length) {
+	int count = 0;
+	for(;;) {
+		switch (choice) {
 			case '\t':
-				menu_driver(menu, REQ_DOWN_ITEM);	
+				if (count < length-1) {
+					menu_driver(menu, REQ_DOWN_ITEM);	
+					count++;
+				}
+				else {
+					menu_driver(menu, REQ_UP_ITEM);	
+					count = 0;
+				}
 				refresh();
-				c = getch();
 				break;
+			case '\n':
+			case KEY_ENTER:
+				return choice;
 		} 
-	} while (c == '\t');
+		choice = getch();
+	} 
 }
 
-static void auto_cmpl() {
+static void auto_complete() {
 	GET_CUR_POS;
 	ITEM **items = (ITEM **)calloc(2, sizeof(ITEM*));
 	items[0] = new_item("first item", "Desc");
 	items[1] = new_item("second item", "Desc");
 	MENU *auto_menu = new_menu((ITEM**)items);
-	set_menu_sub(auto_menu, derwin(stdscr, 0, 0, y, x));
+	WINDOW *menu_window = derwin(stdscr, 0, 0, y, x);
+	set_menu_sub(auto_menu, menu_window);
 	post_menu(auto_menu);
 	refresh();
-	char c  = getch();
-	if (c=='\t') {
-		scroll_menu(auto_menu, c);
+	char next_char = getch();
+	if (next_char=='\t') {
+		addch(scroll_menu(auto_menu, next_char, 2));
+		refresh();
 	}
+	refresh();
 	for (int j = 0; j < sizeof(items)/sizeof(items[0]); j++) {
 		free_item(items[j]);
 	}
 	free_menu(auto_menu);
-	unpost_menu(auto_menu);
 }
