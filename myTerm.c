@@ -97,7 +97,4 @@ static void auto_complete() {
 		free_item(items[j]);
 	}
 	free_menu(auto_menu);
-	free(items);
-	delwin(menu_window);
-	unpost_menu(auto_menu);
 }
