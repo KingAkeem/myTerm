@@ -2,11 +2,13 @@
 #include <curses.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
+
 
 #define GET_CUR_POS int x, y; getyx(stdscr, y, x)
 #define MAX_WORD_SIZE 500
 
-void signal_handler(int);
+void exit_editor(int);
 static void auto_complete();
 static int scroll_menu(MENU*, int, int);
 
@@ -28,7 +30,6 @@ int main(int argc, const char* argv[]) {
 		// If user input a period then we look to autocomplete
 		case '.':
 			addch(c);
-			refresh();
 			auto_complete();
 			refresh();
 			continue; // No need to go through rest of loop break;
@@ -79,14 +80,16 @@ static void auto_complete() {
 	ITEM **items = (ITEM **)calloc(2, sizeof(ITEM*));
 	items[0] = new_item("first item", "Desc");
 	items[1] = new_item("second item", "Desc");
-	MENU *auto_menu = new_menu((ITEM**)items);
+	MENU *auto_menu = new_menu(items);
 	WINDOW *menu_window = derwin(stdscr, 0, 0, y, x);
 	set_menu_sub(auto_menu, menu_window);
 	post_menu(auto_menu);
 	refresh();
 	char next_char = getch();
+	int choice;
 	if (next_char=='\t') {
-		addch(scroll_menu(auto_menu, next_char, 2));
+		choice = scroll_menu(auto_menu, next_char, 2);
+		addch(choice);
 		refresh();
 	}
 	refresh();
@@ -94,4 +97,7 @@ static void auto_complete() {
 		free_item(items[j]);
 	}
 	free_menu(auto_menu);
+	free(items);
+	delwin(menu_window);
+	unpost_menu(auto_menu);
 }
