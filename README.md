@@ -25,8 +25,8 @@ For now running myTerm is as simple as running `make` in the base directory. You
 - [ ] Fix segmentation fault on Mac OS X.
 - [ ] Add modules to search directories
 - [ ] Search user directories for auto-completion of code using user libraries
-- [ ] Fix Makefile so it'll add the correct library for `curses`
+- [x] Makefile uses lldb debugger instead of gdb when using Darwin
 - [ ] Add line numbering
 - [ ] Add syntax highlighting
 - [x] Add popup menu for auto-completion after (.)
-- [ ] Select highlighted item from popup menu
+- [x] Select highlighted item from popup menu

@@ -1,18 +1,17 @@
-#include <string.h>
 #include <menu.h>
 #include <curses.h>
 #include <stdlib.h>
-#include <stdio.h>
-
+#include <signal.h>
 
 #define GET_CUR_POS int x, y; getyx(stdscr, y, x)
 #define MAX_WORD_SIZE 500
 
+void signal_handler(int);
 static void auto_complete();
-static int scroll_menu(MENU*, int, int); 
+static int scroll_menu(MENU*, int, int);
 
 int main(int argc, const char* argv[]) {
-
+	signal(SIGINT, exit_editor);
 	(void) initscr(); // Initalizes variables needed
 	(void) noecho(); // Disables automatic echoing
 	(void) cbreak(); // Allowws single character buffering
@@ -45,17 +44,24 @@ int main(int argc, const char* argv[]) {
 	}
 }
 
+void exit_editor(int signo) {
+	if (signo == SIGINT) {
+		endwin();
+		exit(0);
+	}
+}
+
 static int scroll_menu(MENU *menu, int choice, int length) {
 	int count = 0;
 	for(;;) {
 		switch (choice) {
 			case '\t':
 				if (count < length-1) {
-					menu_driver(menu, REQ_DOWN_ITEM);	
+					menu_driver(menu, REQ_DOWN_ITEM);
 					count++;
 				}
 				else {
-					menu_driver(menu, REQ_UP_ITEM);	
+					menu_driver(menu, REQ_UP_ITEM);
 					count = 0;
 				}
 				refresh();
@@ -63,9 +69,9 @@ static int scroll_menu(MENU *menu, int choice, int length) {
 			case '\n':
 			case KEY_ENTER:
 				return choice;
-		} 
+		}
 		choice = getch();
-	} 
+	}
 }
 
 static void auto_complete() {
