@@ -28,3 +28,4 @@ For now running myTerm is as simple as running `make` in the base directory. You
 - [ ] Add line numbering
 - [ ] Add syntax highlighting
 - [x] Add popup menu for auto-completion after (.)
+- [ ] Select highlighted item from popup menu
