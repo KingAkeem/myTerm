@@ -92,7 +92,6 @@ static void auto_complete() {
 		addch(choice);
 		refresh();
 	}
-	refresh();
 	for (int j = 0; j < sizeof(items)/sizeof(items[0]); j++) {
 		free_item(items[j]);
 	}
