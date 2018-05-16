@@ -4,13 +4,11 @@
 #include <signal.h>
 #include <unistd.h>
 
-
-#define GET_CUR_POS int x, y; getyx(stdscr, y, x)
 #define MAX_WORD_SIZE 500
 
 void exit_editor(int);
 static void auto_complete();
-static int scroll_menu(MENU*, int, int);
+static void scroll_menu(MENU*, int);
 
 int main(int argc, const char* argv[]) {
 	signal(SIGINT, exit_editor);
@@ -31,7 +29,6 @@ int main(int argc, const char* argv[]) {
 		case '.':
 			addch(c);
 			auto_complete();
-			refresh();
 			continue; // No need to go through rest of loop break;
 		default:
 			addch(c);
@@ -52,9 +49,10 @@ void exit_editor(int signo) {
 	}
 }
 
-static int scroll_menu(MENU *menu, int choice, int length) {
+static void scroll_menu(MENU *menu, int length) {
 	int count = 0;
-	for(;;) {
+	int choice = '\t';
+	do {
 		switch (choice) {
 			case '\t':
 				if (count < length-1) {
@@ -65,34 +63,33 @@ static int scroll_menu(MENU *menu, int choice, int length) {
 					menu_driver(menu, REQ_UP_ITEM);
 					count = 0;
 				}
-				refresh();
 				break;
 			case '\n':
 			case KEY_ENTER:
-				return choice;
+				menu_driver(menu, REQ_TOGGLE_ITEM);
+				addch(choice);
+				refresh();
+				return;
 		}
 		choice = getch();
-	}
+	} while(true);
 }
 
 static void auto_complete() {
-	GET_CUR_POS;
+	int y, x;
+	getyx(stdscr, y, x);
 	ITEM **items = (ITEM **)calloc(2, sizeof(ITEM*));
 	items[0] = new_item("first item", "Desc");
 	items[1] = new_item("second item", "Desc");
 	MENU *auto_menu = new_menu(items);
+	menu_opts_on(auto_menu, O_ONEVALUE);
 	WINDOW *menu_window = derwin(stdscr, 0, 0, y, x);
 	set_menu_sub(auto_menu, menu_window);
 	post_menu(auto_menu);
 	refresh();
-	char next_char = getch();
-	int choice;
-	if (next_char=='\t') {
-		choice = scroll_menu(auto_menu, next_char, 2);
-		addch(choice);
-		refresh();
+	if (getch()=='\t') {
+			scroll_menu(auto_menu, 2);
 	}
-	refresh();
 	for (int j = 0; j < sizeof(items)/sizeof(items[0]); j++) {
 		free_item(items[j]);
 	}
