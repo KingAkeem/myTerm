@@ -51,6 +51,7 @@ void exit_editor(int signo) {
 
 static void scroll_menu(MENU *menu, ITEM** items, int length) {
 	int count = 0;
+	ITEM *c_item;	
 	int choice = '\t';
 	do {
 		switch (choice) {
@@ -65,12 +66,12 @@ static void scroll_menu(MENU *menu, ITEM** items, int length) {
 					set_current_item(menu, items[count]);
 					count = 0;
 				}
+				refresh();
 				break;
 			case '\n':
 			case KEY_ENTER:
-				refresh();
-				ITEM *chitem = current_item(menu);
-				const char chname = *item_name(chitem);
+				c_item = current_item(menu);
+				const char chname = *item_name(c_item);
 				addch((unsigned long)chname);
 				refresh();
 				return;
@@ -92,7 +93,6 @@ static void auto_complete() {
 	menu_opts_on(auto_menu, O_ONEVALUE);
 	// Creating window for menu and accepting special keys
 	WINDOW *menu_window = derwin(stdscr, 0, 0, y, x);
-	addch('.');
 	refresh();
 	keypad(menu_window, TRUE);
 	// Setting up menu and posting menu
@@ -101,8 +101,7 @@ static void auto_complete() {
 	post_menu(auto_menu);
 	refresh();
 	if (getch()=='\t') {
-			scroll_menu(menu_window, auto_menu, items, 2);
-			wgetch(menu_window);
+			scroll_menu(auto_menu, items, 2);
 	}
 	unpost_menu(auto_menu);
 	// Free menu and item memory
