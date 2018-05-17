@@ -7,8 +7,9 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 myTerm : myTerm.c
-	cc myTerm.c -lcurses -lmenu
-debug : a.out
-	$(DEBUGGER) a.out
+	cc -o myTerm myTerm.c -lcurses -lmenu
+debug : myTerm 
+	$(DEBUGGER) myTerm 
 a.out : myTerm.c
-	cc -g myTerm.c -lcurses -lmenu
+	cc -o myTerm -g myTerm.c -lcurses -lmenu
+

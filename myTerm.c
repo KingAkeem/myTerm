@@ -8,16 +8,16 @@
 
 void exit_editor(int);
 static void auto_complete();
-static void scroll_menu(MENU*, int);
+static void scroll_menu(MENU*, ITEM**, int);
 
-int main(int argc, const char* argv[]) {
+int main() {
 	signal(SIGINT, exit_editor);
 	(void) initscr(); // Initalizes variables needed
 	(void) noecho(); // Disables automatic echoing
 	(void) cbreak(); // Allowws single character buffering
 	refresh(); // Clears screen entirely
 	keypad(stdscr, TRUE); // Captures special keystrokes
-
+	
 	char *word = calloc(MAX_WORD_SIZE, 1);
 	int i = 0;
 	char c;
@@ -49,7 +49,7 @@ void exit_editor(int signo) {
 	}
 }
 
-static void scroll_menu(MENU *menu, int length) {
+static void scroll_menu(MENU *menu, ITEM** items, int length) {
 	int count = 0;
 	int choice = '\t';
 	do {
@@ -57,17 +57,21 @@ static void scroll_menu(MENU *menu, int length) {
 			case '\t':
 				if (count < length-1) {
 					menu_driver(menu, REQ_DOWN_ITEM);
+					set_current_item(menu, items[count]);
 					count++;
 				}
 				else {
 					menu_driver(menu, REQ_UP_ITEM);
+					set_current_item(menu, items[count]);
 					count = 0;
 				}
 				break;
 			case '\n':
 			case KEY_ENTER:
 				menu_driver(menu, REQ_TOGGLE_ITEM);
-				addch(choice);
+				ITEM *chitem = current_item(menu);
+				const char chname = *item_name(chitem);
+				addch((unsigned long)chname);
 				refresh();
 				return;
 		}
@@ -88,10 +92,11 @@ static void auto_complete() {
 	post_menu(auto_menu);
 	refresh();
 	if (getch()=='\t') {
-			scroll_menu(auto_menu, 2);
+			scroll_menu(auto_menu, items, 2);
 	}
 	for (int j = 0; j < sizeof(items)/sizeof(items[0]); j++) {
 		free_item(items[j]);
 	}
 	free_menu(auto_menu);
+	unpost_menu(auto_menu);
 }
