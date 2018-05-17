@@ -1,5 +1,4 @@
-<p align="center>
-<pre>
+ <pre align="center">
          tttt                                                                   iiii  
       ttt:::t                                                                  i::::i 
       t:::::t                                                                   iiii  
@@ -17,7 +16,6 @@ tttttt:::::::tttttt    e::::::e     e:::::enn:::::::::::::::ns::::::ssss:::::s i
         tt:::::::::::tt  ee:::::::::::::e    n::::n    n::::n s:::::::::::ss  i::::::i
           ttttttttttt      eeeeeeeeeeeeee    nnnnnn    nnnnnn  sssssssssss    iiiiiiii
 </pre>
-</p>
 
 # Purpose
 
