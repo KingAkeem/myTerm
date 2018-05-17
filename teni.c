@@ -68,7 +68,7 @@ static void scroll_menu(MENU *menu, ITEM** items, int length) {
 				break;
 			case '\n':
 			case KEY_ENTER:
-				menu_driver(menu, REQ_TOGGLE_ITEM);
+				refresh();
 				ITEM *chitem = current_item(menu);
 				const char chname = *item_name(chitem);
 				addch((unsigned long)chname);
@@ -80,23 +80,34 @@ static void scroll_menu(MENU *menu, ITEM** items, int length) {
 }
 
 static void auto_complete() {
+	// Setting screen position for words
 	int y, x;
 	getyx(stdscr, y, x);
+	// Creating items
 	ITEM **items = (ITEM **)calloc(2, sizeof(ITEM*));
 	items[0] = new_item("first item", "Desc");
 	items[1] = new_item("second item", "Desc");
+	// Creating menu
 	MENU *auto_menu = new_menu(items);
 	menu_opts_on(auto_menu, O_ONEVALUE);
+	// Creating window for menu and accepting special keys
 	WINDOW *menu_window = derwin(stdscr, 0, 0, y, x);
+	addch('.');
+	refresh();
+	keypad(menu_window, TRUE);
+	// Setting up menu and posting menu
+	set_menu_mark(auto_menu, "*");
 	set_menu_sub(auto_menu, menu_window);
 	post_menu(auto_menu);
 	refresh();
 	if (getch()=='\t') {
-			scroll_menu(auto_menu, items, 2);
+			scroll_menu(menu_window, auto_menu, items, 2);
+			wgetch(menu_window);
 	}
+	unpost_menu(auto_menu);
+	// Free menu and item memory
 	for (int j = 0; j < sizeof(items)/sizeof(items[0]); j++) {
 		free_item(items[j]);
 	}
 	free_menu(auto_menu);
-	unpost_menu(auto_menu);
 }

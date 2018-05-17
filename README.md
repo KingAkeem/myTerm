@@ -1,12 +1,8 @@
 <pre>
- ___      ___  ___  ___  ___________  _______   _______   ___      ___
-|"  \    /"  ||"  \/"  |("     _   ")/"     "| /"      \ |"  \    /"  |
- \   \  //   | \   \  /  )__/  \\__/(: ______)|:        | \   \  //   |
- /\\  \/.    |  \\  \/      \\_ /    \/    |  |_____/   ) /\\  \/.    |
-|: \.        |  /   /       |.  |    // ___)_  //      / |: \.        |
-|.  \    /:  | /   /        \:  |   (:      "||:  __   \ |.  \    /:  |
-|___|\__/|___||___/          \__|    \_______)|__|  \___)|___|\__/|___|
-
+ | |_ ___ _ __ (_)
+ | __/ _ \ '_ \| |
+ | ||  __/ | | | |
+  \__\___|_| |_|_|
 </pre>
 
 # Purpose
@@ -17,7 +13,7 @@ text editors available. So I decided to build this one. I'm attempting to make
 it as simple as possible and configurable so that anyone who has a small amount
 of C knowledge can add features that they'd like.
 
-For now running myTerm is as simple as running `make` in the base directory. You will need both the `curses` library and the `menu` library. Both of these should already be installed on most UNIX systems by default.
+For now running teni is as simple as running `make` in the base directory. You will need both the `curses` library and the `menu` library. Both of these should already be installed on most UNIX systems by default.
 
 [![demo](https://asciinema.org/a/IRSNDTu9FMbwSKnSYwBkIRjt9.png)](https://asciinema.org/a/IRSNDTu9FMbwSKnSYwBkIRjt9?autoplay=1)
 
