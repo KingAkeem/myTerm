@@ -26,8 +26,7 @@ it as simple as possible and configurable so that anyone who has a small amount
 of C knowledge can add features that they'd like.
 
 For now running teni is as simple as running `make` in the base directory. You will need both the `curses` library and the `menu` library. Both of these should already be installed on most UNIX systems by default.
-
-[![demo](https://asciinema.org/a/IRSNDTu9FMbwSKnSYwBkIRjt9.png)](https://asciinema.org/a/IRSNDTu9FMbwSKnSYwBkIRjt9?autoplay=1)
+[![demo](https://asciinema.org/a/tKl1TaUphMlWSgMmK3PWn8MaU.png)](https://asciinema.org/a/tKl1TaUphMlWSgMmK3PWn8MaU?autoplay=1)
 
 ### TO-DO
 - [ ] Fix segmentation fault on Mac OS X.
