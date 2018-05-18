@@ -6,9 +6,10 @@ ifeq ($(UNAME_S),Darwin)
 	DEBUGGER = lldb
 endif
 
-myTerm : myTerm.c
-	cc myTerm.c -lcurses -lmenu
-debug : a.out
-	$(DEBUGGER) a.out
-a.out : myTerm.c
-	cc -g myTerm.c -lcurses -lmenu
+teni : teni.c
+	cc -o teni teni.c -lcurses -lmenu
+debug : teni 
+	$(DEBUGGER) teni 
+a.out : teni.c
+	cc -o teni -g teni.c -lcurses -lmenu
+
