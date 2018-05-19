@@ -46,6 +46,9 @@ int main() {
 			}
 			refresh();
 			break;
+		case 27:
+		   endwin();
+		   exit(0);
 		default:
 			addch(c);
 			refresh();
