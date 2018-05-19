@@ -19,9 +19,8 @@ int main() {
 	refresh(); // Clears screen entirely
 	keypad(stdscr, TRUE); // Captures special keystrokes
 
-	char *word = calloc(MAX_WORD_SIZE, 1);
-	int i = 0;
-	char c;
+
+	int c;
 	int y;
 	int x;
 	for(;;) {
@@ -33,17 +32,24 @@ int main() {
 			addch(c);
 			getyx(stdscr, y, x);
 			auto_complete(y, x);
-			continue; // No need to go through rest of loop break;
+			continue; // No need to go through rest of loop
+		case 127:
+		case 8:
+		case KEY_BACKSPACE:
+			delch();
+			getyx(stdscr, y, x);
+			if (x == 0) {
+				deleteln();
+				move(y-1, x);
+			} else {
+			mvdelch(y, x-1);
+			}
+			refresh();
+			break;
 		default:
 			addch(c);
 			refresh();
 		}
-		if (sizeof(word) == MAX_WORD_SIZE) {
-			free(word);
-			word = calloc(MAX_WORD_SIZE, 1);
-		}
-		word[i] = c;
-		i++;
 	}
 }
 
@@ -56,9 +62,6 @@ void exit_editor(int signo) {
 
 static int scroll_menu(MENU *menu, ITEM** items, int length) {
 	int count = 0;
-	int y;
-	int x;
-	ITEM *c_item;
 	int choice = '\t';
 	do {
 		switch (choice) {
@@ -91,10 +94,8 @@ static void auto_complete(int y, int x) {
 	item_names[1] = "func2()";
 	// Creating menu
 	MENU *auto_menu = new_menu(items);
-	menu_opts_on(auto_menu, O_ONEVALUE);
 	// Creating window for menu and accepting special keys
 	WINDOW *menu_window = derwin(stdscr, 0, 0, y, x);
-	refresh();
 	keypad(menu_window, TRUE);
 	// Setting up menu and posting menu
 	set_menu_mark(auto_menu, "*");
@@ -102,9 +103,10 @@ static void auto_complete(int y, int x) {
 	post_menu(auto_menu);
 	refresh();
 	int selection;
-	if (getch()=='\t') { menu_driver(auto_menu, REQ_DOWN_ITEM);
-			refresh();
-			 selection = scroll_menu(auto_menu, items, 2);
+	if (getch()=='\t') { 
+		menu_driver(auto_menu, REQ_DOWN_ITEM);
+		refresh();
+		selection = scroll_menu(auto_menu, items, 2);
 	}
 	unpost_menu(auto_menu);
 	mvprintw(y, x, "%s", item_names[selection]);

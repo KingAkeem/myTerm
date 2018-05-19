@@ -29,11 +29,6 @@ For now running teni is as simple as running `make` in the base directory. You w
 [![demo](https://asciinema.org/a/tKl1TaUphMlWSgMmK3PWn8MaU.png)](https://asciinema.org/a/tKl1TaUphMlWSgMmK3PWn8MaU?autoplay=1)
 
 ### TO-DO
-- [ ] Fix segmentation fault on Mac OS X.
-- [ ] Add modules to search directories
-- [ ] Search user directories for auto-completion of code using user libraries
-- [x] Makefile uses lldb debugger instead of gdb when using Darwin
-- [ ] Add line numbering
-- [ ] Add syntax highlighting
-- [x] Add popup menu for auto-completion after (.)
-- [x] Select highlighted item from popup menu
+- [ ] Give user ability erase characters
+- [ ] Add line numbering 
+- [ ] Add Syntax Highlighting
