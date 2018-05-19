@@ -4,8 +4,6 @@
 #include <signal.h>
 #include <unistd.h>
 
-#define MAX_WORD_SIZE 500
-
 
 void exit_editor(int);
 static void auto_complete(int, int);

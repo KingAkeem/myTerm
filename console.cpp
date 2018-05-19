@@ -18,6 +18,16 @@ class Console {
 		~Console() {
 			endwin();
 		}
+
+		void delete_char() {
+			if (this->row() == 0) {
+				deleteln();
+				move(this->y-1, this->x);	
+			} else {
+				mvdelch(this->y, this->x-1);	
+			}	
+			refresh();
+		}
 		
 		constexpr int column() {
 			getyx(this->main_window, y, x);	

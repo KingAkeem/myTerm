@@ -5,13 +5,14 @@
 #include <stdio.h>
 
 class Menu {
-	int selection;
 	ITEM **items;
 	std::vector<std::string> *names;
 	int item_count;
  	MENU *menu;	
 	WINDOW *menu_win;
 	public:
+		int x;
+		int y;
 		Menu(std::vector<std::string>& item_names, std::vector<std::string>& item_desc) {
 			if (item_names.size() != item_desc.size()) {
 				perror("Item names and item descriptions are not equal");		
@@ -23,6 +24,7 @@ class Menu {
 				items[i] = new_item(item_names[i].c_str(), item_desc[i].c_str());	
 			}
 			menu = new_menu(items);
+			getyx(stdscr, y, x);
 		}
 
 		~Menu(){
@@ -32,7 +34,7 @@ class Menu {
 			free_menu(menu);
 		}
 
-		void show(const char *marker, int y, int x) {
+		void show(const char *marker) {
 			menu_win = derwin(stdscr, 0, 0, y, x);	
 			set_menu_mark(menu, marker);	
 			set_menu_sub(menu, menu_win);
@@ -40,7 +42,8 @@ class Menu {
 			refresh();
 		}
 
-		void make_selection(int y, int x) {
+		void make_selection() {
+			int selection;
 			menu_driver(menu, REQ_DOWN_ITEM);
 			refresh();
 			do {
@@ -58,7 +61,7 @@ class Menu {
 					case '\n':
 					case KEY_ENTER:
 						unpost_menu(menu);	
-						mvprintw(y, x, "%s", names[selection]); 
+						mvprintw(this->y, this->x, "%s", names[selection]); 
 						return;
 				}	
 			} while(true); 
