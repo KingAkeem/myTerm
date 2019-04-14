@@ -8,20 +8,28 @@
 
 static void exit_editor(int);
 
+using namespace std;
+
+Console main_console = Console();
 int main() {
 	signal(SIGINT, exit_editor);
-	Console main_console = Console();
 
 	int key_input;
 	for (;;) {
 		key_input = getch();
 		switch (key_input) {
 			case '.':
-				addch(key_input);	
-				std::vector<std::string> item_names = ["func1", "func2"];
-				std::vector<std::string> item_desc = ["desc1", "desc2"];
-				Menu menu = Menu(item_names, item_desc);
-				menu.make_selection();	
+                {
+                    addch(key_input);	
+                    vector<string> item_names;
+                    item_names.push_back("func1");
+                    item_names.push_back("func2");
+                    vector<string> item_desc;
+                    item_desc.push_back("desc1");
+                    item_desc.push_back("desc2");
+                    Menu menu = Menu(item_names, item_desc);
+                    menu.make_selection();	
+                }
 				continue;	
 				break;
 			case 127:
@@ -33,7 +41,7 @@ int main() {
 	}
 }
 
-static void exit_editor(Console& win, int signal) {
+static void exit_editor(int signal) {
 	if (signal == SIGINT) {
 		endwin();
 		exit(0);

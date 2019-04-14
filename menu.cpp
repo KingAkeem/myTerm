@@ -20,7 +20,7 @@ class Menu {
 			names = &item_names;
 			item_count = item_names.size();
 			items = (ITEM **)calloc(item_names.size(), sizeof(ITEM*));
-			for (int i=0; i < item_names.size(); i++) {
+			for (size_t i=0; i < item_names.size(); i++) {
 				items[i] = new_item(item_names[i].c_str(), item_desc[i].c_str());	
 			}
 			menu = new_menu(items);
@@ -28,7 +28,7 @@ class Menu {
 		}
 
 		~Menu(){
-			for (int j = 0; j < sizeof(items)/sizeof(items[0]); j++) {
+			for (size_t j = 0; j < sizeof(items)/sizeof(items[0]); j++) {
 				free_item(items[j]);
 			}
 			free_menu(menu);

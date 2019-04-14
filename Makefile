@@ -7,9 +7,13 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 teni : teni.c
-	cc -o teni teni.c -lcurses -lmenu
+	cc -o teni teni.c -lmenu -lcurses 
+ccteni : teni.cpp
+	c++ -o tenicpp teni.cpp -lmenu -lncurses
 debug : teni 
 	$(DEBUGGER) teni 
 a.out : teni.c
 	cc -o teni -g teni.c -lcurses -lmenu
+clean :
+	rm -f teni tenicpp
 
