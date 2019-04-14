@@ -4,16 +4,18 @@
 #include <string>
 #include <stdio.h>
 
+using namespace std;
+
 class Menu {
 	ITEM **items;
-	std::vector<std::string> *names;
+	vector<string> *names;
 	int item_count;
  	MENU *menu;	
 	WINDOW *menu_win;
 	public:
 		int x;
 		int y;
-		Menu(std::vector<std::string>& item_names, std::vector<std::string>& item_desc) {
+		Menu(vector<string>& item_names, vector<string>& item_desc) {
 			if (item_names.size() != item_desc.size()) {
 				perror("Item names and item descriptions are not equal");		
 			}	
