@@ -43,7 +43,7 @@ int main() {
 
 static void exit_editor(int signal) {
 	if (signal == SIGINT) {
-		endwin();
+        main_console.~Console();
 		exit(0);
 	}
 }
