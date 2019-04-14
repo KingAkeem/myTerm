@@ -34,6 +34,7 @@ int main() {
                     item_desc.push_back("desc1");
                     item_desc.push_back("desc2");
                     Menu menu = Menu(item_names, item_desc);
+                    menu.show("*");
                     menu.make_selection();	
                 }
 				continue;	

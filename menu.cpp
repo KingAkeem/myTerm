@@ -21,7 +21,7 @@ class Menu {
 			}	
 			names = &item_names;
 			item_count = item_names.size();
-			items = (ITEM **)calloc(item_names.size(), sizeof(ITEM*));
+			items = (ITEM **) calloc(item_count, sizeof(ITEM*));
 			for (size_t i=0; i < item_names.size(); i++) {
 				items[i] = new_item(item_names[i].c_str(), item_desc[i].c_str());	
 			}
