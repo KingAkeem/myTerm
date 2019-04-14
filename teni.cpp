@@ -10,7 +10,7 @@ static void exit_editor(int);
 
 using namespace std;
 
-Console main_console = Console();
+Console *main_console = new Console();
 int main() {
 	signal(SIGINT, exit_editor);
 
@@ -35,7 +35,7 @@ int main() {
 			case 127:
 			case 8:
 			case KEY_BACKSPACE:
-				main_console.delete_char();
+				main_console->delete_char();
 				break;
 		}
 	}
@@ -43,7 +43,7 @@ int main() {
 
 static void exit_editor(int signal) {
 	if (signal == SIGINT) {
-        main_console.~Console();
+        main_console->~Console();
 		exit(0);
 	}
 }
