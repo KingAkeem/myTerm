@@ -11,6 +11,12 @@ static void exit_editor(int);
 using namespace std;
 
 Console *main_console = new Console();
+
+static void display_char(char c) {
+    addch(c);
+    refresh();
+}
+
 int main() {
 	signal(SIGINT, exit_editor);
 
@@ -37,6 +43,8 @@ int main() {
 			case KEY_BACKSPACE:
 				main_console->delete_char();
 				break;
+            default:
+                display_char(key_input);
 		}
 	}
 }
